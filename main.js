@@ -130,8 +130,8 @@ console.log(total);
 
 async function fetchData() {
     try {
-        const response =  await fetch("/api/data");
-        const data =  await response.json();
+        const response = await fetch("/api/data");
+        const data = await response.json();
         console.log(data);
     } catch (error) {
         console.error(error);
@@ -142,5 +142,52 @@ fetchData();
 
 
 // 問題12
+function createCounter() {
+    let count = 0;
+    return {
+        increment: function () {
+            count++;
+        },
+        getCount: function () {
+            return count;
+        }
+    }
+};
+
+const counter = createCounter();
+counter.increment();
+counter.increment();
+console.log(counter.getCount()); // 2
 
 
+// 問題13
+function myPromiseAll(promises) {
+    return new Promise((resolve, reject) => {
+        const results = [];
+        let completed = 0;
+
+        promises.forEach((promise, index) => {
+            Promise.resolve(promise)
+                .then((result) => {
+                    results[index] = result;
+                    completed++;
+
+                    if (completed === promises.length) {
+                        resolve(results);
+                    }
+                })
+                .catch((error) => {
+                    reject(error);
+                });
+        });
+    });
+}
+
+// 以下と同じ
+const results = await Promise.all([
+  Promise.resolve(100),
+  Promise.resolve(200),
+  Promise.resolve(300)
+]);
+
+console.log(results); // [100, 200, 300]
